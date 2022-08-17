@@ -14,7 +14,7 @@ io.on("connection", (socket) => {
 
   socket.on("sendScore", (res) => {
     const roomUid = res.data.roomUid
-    const preScore = lists.filter((list) => list.data.roomUid === roomUid && list.data.userName === res.data.userName)
+    const preScore = lists.filter((list) => list.data.userName === res.data.userName)
   
     socket.join(roomUid)
     lists.push(res)
@@ -26,6 +26,12 @@ io.on("connection", (socket) => {
     io.in(roomUid).emit("receivedScore", lists.filter((e) => {
       return e.data.roomUid == roomUid
     }))
+  })
+
+  socket.on("logOutRoom", (res) => {
+    const roomUid = res.data.roomUid
+    lists = lists.filter((list) => list.data.userName !== res.data.userName)
+    io.in(roomUid).emit("receivedScore", lists)
   })
 
   socket.on("disconnect", (data) => {
