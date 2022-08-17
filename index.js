@@ -34,6 +34,21 @@ io.on("connection", (socket) => {
     io.in(roomUid).emit("receivedScore", lists)
   })
 
+  socket.on("openScoreRequest", (res) => {
+    const roomUid = res.data.roomUid
+    io.in(roomUid).emit("openAllScore")
+  })
+
+  socket.on("resetScoreRequest", (res) => {
+    const roomUid = res.data.roomUid
+    lists = lists.map((list) => {
+      if (list.data.roomUid === roomUid) {
+        return { data: { roomUid: roomUid, userName: list.data.userName, value: 0 }}
+      }  
+    })
+    io.in(roomUid).emit("resetAllScore", lists)
+  })
+
   socket.on("disconnect", (data) => {
     console.log('切断されました')
   })
