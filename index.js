@@ -44,9 +44,11 @@ io.on("connection", (socket) => {
     lists = lists.map((list) => {
       if (list.data.roomUid === roomUid) {
         return { data: { roomUid: roomUid, userName: list.data.userName, value: 0 }}
-      }  
+      } else {
+        return list
+      }
     })
-    io.in(roomUid).emit("resetAllScore", lists)
+    io.in(roomUid).emit("resetAllScore", lists.filter((list) => list.data.roomUid === roomUid))
   })
 
   socket.on("disconnect", (data) => {
