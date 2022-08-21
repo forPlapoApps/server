@@ -9,6 +9,11 @@ const io = new Server(server, {
 
 let lists = []
 
+app.get("/", (req, res) => {
+  res.sendFile(__dirname + '/pages/index.html')
+})
+
+
 io.on("connection", (socket) => {
   console.log('接続しました')
 
