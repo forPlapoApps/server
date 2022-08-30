@@ -35,6 +35,8 @@ io.on("connection", (socket) => {
   })
 
   socket.on("logOutRoom", (res) => {
+    console.log('welcome....')
+    console.log(res)
     const roomUid = res.data.roomUid
     lists = lists.filter((list) => list.data.userName !== res.data.userName)
     io.in(roomUid).emit("receivedScore", lists)
