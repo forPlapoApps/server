@@ -16,5 +16,13 @@
     "nodemon": "^2.0.19",
     "socket.io": "^4.5.1",
     "socket.io-client": "^4.5.2"
+  },
+  "devDependencies": {
+    "jest-plugin-context": "^2.9.0"
+  },
+  "jest": {
+    "setupFiles": [
+      "jest-plugin-context/setup"
+    ]
   }
 }
