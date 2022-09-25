@@ -24,6 +24,7 @@ io.on("connection", (socket) => {
   
     socket.join(roomUid)
     lists.push(res)
+    socket.emit("userCount", lists.length)
 
     if (preScore.length >= 1) {
       lists = lists.filter((list) => { return list !== preScore[0] })
@@ -62,5 +63,5 @@ io.on("connection", (socket) => {
   })
 })
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8000;
 server.listen(PORT, () => console.log(`server is running on ${PORT}`))
