@@ -18,6 +18,8 @@ app.get("/", (req, res) => {
 io.on("connection", (socket) => {
   console.log('接続しました')
 
+  // on: sendScore, emit: receivedScore
+  // 受け取った情報と同じ部屋に参加している人に情報を返す
   socket.on("sendScore", ({ data: res }) => {
     const roomUid = res.roomUid
     const preScore = lists.filter(({ data }) => data.userName === res.userName)
@@ -25,6 +27,7 @@ io.on("connection", (socket) => {
     socket.join(roomUid)
     lists.push(res)
 
+    // すでに同じユーザー名の情報が登録されていたら、最新のものに上書き
     if (preScore.length >= 1) {
       lists = lists.filter((list) => { return list !== preScore[0] })
     }
@@ -34,8 +37,11 @@ io.on("connection", (socket) => {
     }))
   })
 
+  // on: logOutRoom, emit: receivedScore
+  // ログアウトしたユーザーを配列listから消して、同じ部屋に参加していた人に情報を返す
   socket.on("logOutRoom", ({ data: res }) => {
     const roomUid = res.roomUid
+  
     lists = lists.filter(({ data }) => data.userName !== res.userName)
     io.in(roomUid).emit("receivedScore", lists.filter(({ data }) => {
       return data.roomUid == roomUid
@@ -43,11 +49,18 @@ io.on("connection", (socket) => {
     socket.leave(roomUid)
   })
 
+
+  // on: openScoreRequest, emit: openAllScore
+  // 受け取った情報と同じ部屋に参加している人に、openAllScoreイベントを発動させる
   socket.on("openScoreRequest", ({ data: res }) => {
     const roomUid = res.roomUid
+  
     io.in(roomUid).emit("openAllScore")
   })
 
+
+  // on: resetScoreRequest, emit: resetScoreRequest
+  // 受け取った情報と同じ部屋に参加している人のvalueを0にし、resetAllScoreイベントを発動させる
   socket.on("resetScoreRequest", ({ data: res }) => {
     const roomUid = res.roomUid
     lists = lists.map((list) => {
@@ -57,7 +70,7 @@ io.on("connection", (socket) => {
         return list
       }
     })
-    io.in(roomUid).emit("resetAllScore", lists.filter((list) => list.data.roomUid === roomUid))
+    io.in(roomUid).emit("resetAllScore", lists.filter(({ data }) => data.roomUid === roomUid))
   })
 
   socket.on("disconnect", (data) => {
