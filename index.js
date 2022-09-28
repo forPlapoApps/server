@@ -18,9 +18,9 @@ app.get("/", (req, res) => {
 io.on("connection", (socket) => {
   console.log('接続しました')
 
-  socket.on("sendScore", (res) => {
-    const roomUid = res.data.roomUid
-    const preScore = lists.filter((list) => list.data.userName === res.data.userName)
+  socket.on("sendScore", ({ data: res }) => {
+    const roomUid = res.roomUid
+    const preScore = lists.filter(({ data }) => data.userName === res.userName)
   
     socket.join(roomUid)
     lists.push(res)
@@ -29,27 +29,27 @@ io.on("connection", (socket) => {
       lists = lists.filter((list) => { return list !== preScore[0] })
     }
 
-    io.in(roomUid).emit("receivedScore", lists.filter((list) => {
-      return list.data.roomUid == roomUid
+    io.in(roomUid).emit("receivedScore", lists.filter(({ data }) => {
+      return data.roomUid == roomUid
     }))
   })
 
-  socket.on("logOutRoom", (res) => {
-    const roomUid = res.data.roomUid
-    lists = lists.filter((list) => list.data.userName !== res.data.userName)
-    io.in(roomUid).emit("receivedScore", lists.filter((list) => {
-      return list.data.roomUid == roomUid
+  socket.on("logOutRoom", ({ data: res }) => {
+    const roomUid = res.roomUid
+    lists = lists.filter(({ data }) => data.userName !== res.userName)
+    io.in(roomUid).emit("receivedScore", lists.filter(({ data }) => {
+      return data.roomUid == roomUid
     }))
     socket.leave(roomUid)
   })
 
-  socket.on("openScoreRequest", (res) => {
-    const roomUid = res.data.roomUid
+  socket.on("openScoreRequest", ({ data: res }) => {
+    const roomUid = res.roomUid
     io.in(roomUid).emit("openAllScore")
   })
 
-  socket.on("resetScoreRequest", (res) => {
-    const roomUid = res.data.roomUid
+  socket.on("resetScoreRequest", ({ data: res }) => {
+    const roomUid = res.roomUid
     lists = lists.map((list) => {
       if (list.data.roomUid === roomUid) {
         return { data: { roomUid: roomUid, userName: list.data.userName, value: 0 }}
