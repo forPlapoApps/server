@@ -3,11 +3,11 @@ import { io } from "../app";
 
 let scores: Score[] = [];
 
-const listsAt = (roomUid: string) => {
+const scoresAt = (roomUid: string) => {
   return scores.filter((score) => score.roomUid == roomUid);
 };
 
-const listsExcluded = (wastedScore: Score) => {
+const scoresExcluded = (wastedScore: Score) => {
   return scores.filter((score) => score !== wastedScore)
 }
 
@@ -27,15 +27,15 @@ module.exports = (
     scores.push(res);
 
     if (preScore) {
-      scores = listsExcluded(preScore);
+      scores = scoresExcluded(preScore);
     }
 
-    io.in(roomUid).emit("receivedScore", listsAt(roomUid));
+    io.in(roomUid).emit("receivedScore", scoresAt(roomUid));
   });
 
   socket.on("logOutRoom", ({ roomUid, userName }) => {
     scores = scores.filter((score) => score.userName !== userName);
-    io.in(roomUid).emit("receivedScore", listsAt(roomUid));
+    io.in(roomUid).emit("receivedScore", scoresAt(roomUid));
     socket.leave(roomUid);
   });
 
@@ -49,7 +49,7 @@ module.exports = (
         ? { roomUid, userName: score.userName, value: 0 }
         : score;
     });
-    io.in(roomUid).emit("resetAllScore", listsAt(roomUid));
+    io.in(roomUid).emit("resetAllScore", scoresAt(roomUid));
   });
 
   socket.on("disconnect", (data) => {
