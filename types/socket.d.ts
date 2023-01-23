@@ -12,5 +12,5 @@ interface ServerToClientEvents {
 }
 
 interface InterServerEvents {
-  ping: () => void;
+  // ping: () => void;
 }
