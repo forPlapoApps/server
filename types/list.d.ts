@@ -1,7 +1,5 @@
 type List = {
-  data: {
-    roomUid: string
-    userName: string
-    value: number
-  }
-}
+  roomUid: string;
+  userName: string;
+  value: number;
+};

@@ -12,9 +12,9 @@ module.exports = (
   >
 ) => {
   socket.on("sendScore", (res) => {
-    const roomUid = res.data.roomUid;
+    const roomUid = res.roomUid;
     const preScore = lists.filter(
-      (list) => list.data.userName === res.data.userName
+      (list) => list.userName === res.userName
     );
 
     socket.join(roomUid);
@@ -29,42 +29,40 @@ module.exports = (
     io.in(roomUid).emit(
       "receivedScore",
       lists.filter((list) => {
-        return list.data.roomUid == roomUid;
+        return list.roomUid == roomUid;
       })
     );
   });
 
   socket.on("logOutRoom", (res) => {
-    const roomUid = res.data.roomUid;
-    lists = lists.filter((list) => list.data.userName !== res.data.userName);
+    const roomUid = res.roomUid;
+    lists = lists.filter((list) => list.userName !== res.userName);
     io.in(roomUid).emit(
       "receivedScore",
       lists.filter((list) => {
-        return list.data.roomUid == roomUid;
+        return list.roomUid == roomUid;
       })
     );
     socket.leave(roomUid);
   });
 
   socket.on("openScoreRequest", (res) => {
-    const roomUid = res.data.roomUid;
+    const roomUid = res.roomUid;
     io.in(roomUid).emit("openAllScore");
   });
 
   socket.on("resetScoreRequest", (res) => {
-    const roomUid = res.data.roomUid;
+    const roomUid = res.roomUid;
     lists = lists.map((list) => {
-      if (list.data.roomUid === roomUid) {
-        return {
-          data: { roomUid: roomUid, userName: list.data.userName, value: 0 },
-        };
+      if (list.roomUid === roomUid) {
+        return  { roomUid: roomUid, userName: list.userName, value: 0 }
       } else {
         return list;
       }
     });
     io.in(roomUid).emit(
       "resetAllScore",
-      lists.filter((list) => list.data.roomUid === roomUid)
+      lists.filter((list) => list.roomUid === roomUid)
     );
   });
 
