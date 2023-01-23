@@ -4,7 +4,12 @@ import { Server } from 'socket.io'
 
 const app = express()
 const server = http.createServer(app)
-const io = new Server(server, {
+const io = new Server<
+  ClientToServerEvents,
+  ServerToClientEvents,
+  InterServerEvents,
+  List
+>(server, {
   // cors: { origin: ["http://localhost:3000", "https://for-plapo-apps-client.vercel.app"] }
   cors: { origin: "*" }
 })
