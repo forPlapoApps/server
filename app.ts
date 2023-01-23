@@ -10,15 +10,13 @@ const io = new Server(server, {
 })
 const events = require('./src/events')
 
-let lists: List[] = []
-
 app.get("/", (req, res) => {
   res.send("Welcome to forPlapoApps's server!")
 })
 
 io.on("connection", (socket) => {
   console.log('接続しました')
-  events(socket, lists)
+  events(socket)
 })
 
 const PORT = process.env.PORT || 8000;

@@ -1,7 +1,9 @@
 import { Socket } from "socket.io";
 import { io } from "../app";
 
-module.exports = (socket: Socket, lists: List[]) => {
+let lists: List[] = [];
+
+module.exports = (socket: Socket) => {
   socket.on("sendScore", (res) => {
     console.log('sendScore')
     const roomUid = res.data.roomUid
