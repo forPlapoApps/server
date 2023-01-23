@@ -12,7 +12,6 @@ module.exports = (
   >
 ) => {
   socket.on("sendScore", (res) => {
-    console.log("sendScore");
     const roomUid = res.data.roomUid;
     const preScore = lists.filter(
       (list) => list.data.userName === res.data.userName
@@ -36,7 +35,6 @@ module.exports = (
   });
 
   socket.on("logOutRoom", (res) => {
-    console.log("logOutRoom");
     const roomUid = res.data.roomUid;
     lists = lists.filter((list) => list.data.userName !== res.data.userName);
     io.in(roomUid).emit(
@@ -49,13 +47,11 @@ module.exports = (
   });
 
   socket.on("openScoreRequest", (res) => {
-    console.log("openScoreRequest");
     const roomUid = res.data.roomUid;
     io.in(roomUid).emit("openAllScore");
   });
 
   socket.on("resetScoreRequest", (res) => {
-    console.log("resetScoreRequest");
     const roomUid = res.data.roomUid;
     lists = lists.map((list) => {
       if (list.data.roomUid === roomUid) {
