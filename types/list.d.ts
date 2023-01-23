@@ -1,3 +1,4 @@
+// listというよりscoreだな。
 type List = {
   roomUid: string;
   userName: string;

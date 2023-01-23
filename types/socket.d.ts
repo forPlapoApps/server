@@ -1,15 +1,14 @@
 interface ClientToServerEvents {
-  // これresじゃなくてreqでは。？？？
-  sendScore: (res: List) => void;
-  logOutRoom: (res: List) => void;
-  openScoreRequest: (res: List) => void;
-  resetScoreRequest: (res: List) => void;
+  sendScore: (req: List) => void;
+  logOutRoom: (req: List) => void;
+  openScoreRequest: (req: roomUidType) => void;
+  resetScoreRequest: (req: roomUidType) => void;
 }
 
 interface ServerToClientEvents {
-  receivedScore: (lists: List[]) => void;
+  receivedScore: (res: List[]) => void;
   openAllScore: () => void;
-  resetAllScore: (lists: List[]) => void;
+  resetAllScore: (res: List[]) => void;
 }
 
 interface InterServerEvents {
