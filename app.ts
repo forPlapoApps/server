@@ -8,7 +8,7 @@ const io = new Server<
   ClientToServerEvents,
   ServerToClientEvents,
   InterServerEvents,
-  List
+  Score
 >(server, {
   // cors: { origin: ["http://localhost:3000", "https://for-plapo-apps-client.vercel.app"] }
   cors: { origin: "*" }

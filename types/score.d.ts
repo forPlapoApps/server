@@ -1,5 +1,4 @@
-// listというよりscoreだな。
-type List = {
+type Score = {
   roomUid: string;
   userName: string;
   value: number;

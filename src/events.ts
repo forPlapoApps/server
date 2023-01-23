@@ -1,14 +1,14 @@
 import { Socket } from "socket.io";
 import { io } from "../app";
 
-let lists: List[] = [];
+let scores: Score[] = [];
 
 const listsAt = (roomUid: string) => {
-  return lists.filter((list) => list.roomUid == roomUid);
+  return scores.filter((score) => score.roomUid == roomUid);
 };
 
-const listsExcluded = (wastedScore: List) => {
-  return lists.filter((list) => list !== wastedScore)
+const listsExcluded = (wastedScore: Score) => {
+  return scores.filter((score) => score !== wastedScore)
 }
 
 module.exports = (
@@ -16,25 +16,25 @@ module.exports = (
     ClientToServerEvents,
     ServerToClientEvents,
     InterServerEvents,
-    List
+    Score
   >
 ) => {
   socket.on("sendScore", (res) => {
     const roomUid = res.roomUid;
-    const preScore = lists.filter((list) => list.userName === res.userName)[0];
+    const preScore = scores.filter((score) => score.userName === res.userName)[0];
 
     socket.join(roomUid);
-    lists.push(res);
+    scores.push(res);
 
     if (preScore) {
-      lists = listsExcluded(preScore);
+      scores = listsExcluded(preScore);
     }
 
     io.in(roomUid).emit("receivedScore", listsAt(roomUid));
   });
 
   socket.on("logOutRoom", ({ roomUid, userName }) => {
-    lists = lists.filter((list) => list.userName !== userName);
+    scores = scores.filter((score) => score.userName !== userName);
     io.in(roomUid).emit("receivedScore", listsAt(roomUid));
     socket.leave(roomUid);
   });
@@ -44,10 +44,10 @@ module.exports = (
   });
 
   socket.on("resetScoreRequest", ({ roomUid }) => {
-    lists = lists.map((list) => {
-      return list.roomUid === roomUid
-        ? { roomUid, userName: list.userName, value: 0 }
-        : list;
+    scores = scores.map((score) => {
+      return score.roomUid === roomUid
+        ? { roomUid, userName: score.userName, value: 0 }
+        : score;
     });
     io.in(roomUid).emit("resetAllScore", listsAt(roomUid));
   });
