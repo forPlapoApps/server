@@ -1,7 +1,8 @@
-# これは何
-[forPlapoApps/client](https://github.com/forPlapoApps/client)にレスポンスするexpressサーバー
+# What is this?
+A server for forPlapoApps version 1.
 
-# デプロイ先
-https://forpapoapps-server.onrender.com
+# Deployed URL
+https://forplapoappsserver-v1.onrender.com
+(`v1` branch was deployed in render.com) 
 
-※タイポしているが、そのまま。
+NOTE: This repository was archived because alternative server will be released.
